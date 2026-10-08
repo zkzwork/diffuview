@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="DiffuView: Multi-View Diffusion Pretraining for 3D-Aware Robotic Manipulation. CVPR 2026.">
+  <meta name="keywords" content="Robotic Manipulation, Multi-View Diffusion, 3D Representation, Imitation Learning, CVPR 2026">
+  <meta property="og:title" content="DiffuView: Multi-View Diffusion Pretraining for 3D-Aware Robotic Manipulation"/>
+  <meta property="og:description" content="A diffusion-based framework that learns unified 3D-aware representations through multi-view diffusion pretraining for viewpoint-robust robotic manipulation."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="static/images/first_pic.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+
+  <title>DiffuView &middot; CVPR 2026</title>
+
+  <link rel="icon" type="image/png" href="static/images/first_pic.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans:400,600,700,800|Castoro"
+        rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero is-light">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">
+            <span class="diffu-highlight">DiffuView</span>: Multi-View Diffusion Pretraining<br>for 3D-Aware Robotic Manipulation
+          </h1>
+
+          <div class="is-size-5 publication-authors" style="margin-top:1rem;">
+            <span class="author-block"><a href="#">Kaizhao Zhang</a>,</span>
+            <span class="author-block"><a href="#">Tian Niu</a>,</span>
+            <span class="author-block"><a href="#">Tianyu Liu</a>,</span>
+            <span class="author-block"><a href="#">Chenen Guo</a>,</span>
+            <span class="author-block"><a href="#">Zijun Xu</a>,</span>
+            <span class="author-block"><a href="#">Qingda Hu</a>,</span>
+            <span class="author-block"><a href="#">Wenchao Ding</a><sup>*</sup></span>
+          </div>
+
+          <div class="is-size-6 publication-authors" style="margin-top:0.6rem;">
+            <span class="author-block">Fudan University</span><br>
+            <span class="affil-note is-size-7"><sup>*</sup>Corresponding author: College of Intelligent Robotics and Advanced Manufacturing &middot; dingwenchao@fudan.edu.cn</span>
+          </div>
+
+          <div class="is-size-5" style="margin-top:0.9rem;">
+            <span class="tag is-dark is-medium" style="border-radius:999px;">CVPR 2026</span>
+          </div>
+
+          <!-- Links -->
+          <div class="column has-text-centered" style="margin-top:1.4rem;">
+            <div class="publication-links buttons is-centered">
+              <a href="static/pdfs/DiffuView.pdf" class="button is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span>
+              </a>
+              <a href="static/pdfs/DiffuView_supp.pdf" class="button is-dark">
+                <span class="icon"><i class="fas fa-file-lines"></i></span><span>Supplementary</span>
+              </a>
+              <a href="#" class="button is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+              </a>
+              <a href="#" class="button is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+              </a>
+            </div>
+            <p class="is-size-7 has-text-grey">arXiv &amp; code links coming soon</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TEASER ============ -->
+<section class="section" style="padding-top:1rem;">
+  <div class="container is-max-desktop">
+    <div class="fig-card teaser-figure has-text-centered">
+      <img src="static/images/first_pic.png" alt="DiffuView teaser" style="max-height:620px; width:auto;">
+      <p class="caption">
+        <strong>Comparison of visual representation learning paradigms for robotic manipulation.</strong>
+        (a) MAE-based methods learn by reconstructing masked regions. (b) 3D reconstruction methods lift 2D
+        features into implicit 3D latent spaces via neural rendering. (c) <strong>Ours</strong> leverages a
+        multi-view diffusion model that learns 3D-consistent, geometry-aware representations by generating novel
+        target views conditioned on source observations and camera poses &mdash; enabling unified, view-robust
+        visual understanding for downstream manipulation.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABSTRACT ============ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Abstract</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified is-size-5">
+          <p>
+            Robotic manipulation from visual observations remains challenging due to the lack of 3D-consistent
+            representations that generalize across diverse viewpoints and sensor configurations. Existing methods,
+            primarily based on masked autoencoders or neural scene representations, struggle to capture robust view
+            correspondences due to a lack of global 3D consistency or the requirement for scene-specific optimization.
+            While multi-view diffusion models have recently shown tremendous success in 3D-aware generative synthesis,
+            their powerful representations offer a promising direction for viewpoint-robust visuomotor control.
+          </p>
+          <p>
+            We introduce <strong>DiffuView</strong>, a novel framework that learns unified 3D-aware representations
+            through multi-view diffusion pretraining and deploys them for imitation learning. DiffuView models the
+            conditional generation of target views given source observations within a diffusion framework, enabling
+            the network to implicitly recover scene geometry and enforce view consistency. The pretrained diffusion
+            network is then used as a powerful visual backbone for an action policy, allowing robust control under
+            varying viewpoints and visual conditions. On the <strong>MetaWorld</strong> and <strong>LIBERO</strong>
+            benchmarks &mdash; in both simulation and the real world &mdash; DiffuView achieves superior generalization,
+            improving success rates under viewpoint shifts by <strong>nearly 20%</strong> over existing methods.
+          </p>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card"><div class="num">~20%</div><div class="label">&uarr; success rate under viewpoint shift</div></div>
+          <div class="stat-card"><div class="num">92.2</div><div class="label">LIBERO avg. (100 tasks)</div></div>
+          <div class="stat-card"><div class="num">0.706</div><div class="label">MetaWorld avg. (50 tasks)</div></div>
+          <div class="stat-card"><div class="num">2</div><div class="label">stage framework</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ METHOD ============ -->
+<section class="section" style="background:var(--bg-soft);">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Method</h2>
+
+    <div class="fig-card has-text-centered">
+      <img src="static/images/pipeline.png" alt="DiffuView pipeline">
+      <p class="caption">
+        <strong>(Left) Stage 1 &mdash; Multi-View Diffusion Pretraining.</strong> Target views are reconstructed from
+        source observations using Pl&uuml;cker rays, depth, and warped RGB-depth pairs to learn 3D-consistent latent
+        features.
+        <strong>(Right) Stage 2 &mdash; Policy Learning.</strong> The pretrained backbone acts as a 3D-aware encoder;
+        a FiLM-conditioned Query Transformer (Q-Former) with CLIP text guidance produces task-aware tokens that condition
+        a Mixture-of-Denoising-Experts (MoDE) diffusion policy. A noise token &eta;(&sigma;<sub>t</sub>) modulates attention
+        and drives a noise-conditioned router that sparsely activates experts for faster inference.
+      </p>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content is-size-5 has-text-justified">
+          <h3>Stage 1 &middot; Multi-View Diffusion Pretraining</h3>
+          <p>
+            Given a source observation captured at a known pose and intrinsics, we compute 3D points and reproject them
+            into the target camera to obtain <em>warped RGB and depth maps</em>. For RGB-D cameras the measured depth is
+            used directly; for RGB-only setups a metric depth estimator supplies the geometric conditioning. We further
+            inject per-pixel camera geometry via dense <strong>Pl&uuml;cker ray embeddings</strong>. These geometric cues
+            are fused into the VAE latents through a lightweight convolutional encoder, after which the diffusion model
+            applies <strong>2D spatial attention within each view</strong> and <strong>3D full attention across views</strong>
+            to reason about cross-view geometry.
+          </p>
+          <div class="highlight-box">
+            Trained with a stochastic number of source views (1&ndash;3) and <strong>no temporal positional encoding</strong>,
+            the model is never bound to a fixed view count &mdash; it extrapolates to an arbitrary number of source/target
+            views at inference. Although multi-view data is used during training, deployment needs only a
+            <strong>single-view observation</strong>.
+          </div>
+
+          <h3>Stage 2 &middot; Policy Learning</h3>
+          <p>
+            After pretraining, the diffusion UNet is repurposed as a 3D-aware vision encoder &mdash; serving both as a
+            feature extractor and as a viewpoint-adaptive encoder. Following VPP, we perform only a single diffusion
+            forward pass and extract multi-scale features from the UNet upsampling layers. A
+            <strong>FiLM-conditioned Q-Former</strong>, modulated by the CLIP end-of-text token, produces compact
+            task-relevant visual embeddings that condition a diffusion policy. The policy integrates observation and
+            language embeddings via cross-attention, replaces LayerNorm with <strong>RMSNorm</strong>, adds
+            <strong>action causal self-attention</strong> for temporal consistency, and uses a
+            <strong>noise-timestep conditioned Mixture-of-Experts</strong> (Top-2 of 4 experts) to accelerate denoising.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIMENTS ============ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Experiments</h2>
+
+    <div class="fig-card has-text-centered">
+      <img src="static/images/simulation_1.png" alt="Simulation benchmarks" style="max-height:620px; width:auto;">
+      <p class="caption">
+        <strong>Simulation benchmarks.</strong> We evaluate on (a) LIBERO and (b) MetaWorld, covering a diverse array of
+        manipulation tasks with varying difficulty. (c) We also build <strong>Mv-Bench</strong>, a self-formulated benchmark
+        specifically designed to evaluate view-adaptive capability.
+      </p>
+    </div>
+
+    <!-- LIBERO -->
+    <h3 class="title is-5" style="margin-top:2rem;">LIBERO Benchmark</h3>
+    <div class="results-table-wrap">
+      <table class="results">
+        <thead>
+          <tr>
+            <th>Benchmark</th><th>DP</th><th>MT-ACT</th><th>MDT</th><th>OpenVLA</th>
+            <th>Dita</th><th>VQVLA</th><th>&pi;<sub>0.5</sub>-ki</th><th>DiffuView (Ours)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>LIBERO-10</td><td>51.0</td><td>68.0</td><td>65.0</td><td>53.7</td><td>63.8</td><td>&ndash;</td><td>84.8</td><td class="best">89.2</td></tr>
+          <tr><td>LIBERO-90</td><td>69.0</td><td>54.0</td><td>66.9</td><td>74.8</td><td>&ndash;</td><td>81.0</td><td class="best">92.7</td><td>92.5</td></tr>
+          <tr class="ours"><td>Average (100 tasks)</td><td>67.2</td><td>55.4</td><td>66.7</td><td>72.7</td><td>&ndash;</td><td>&ndash;</td><td>91.9</td><td class="best">92.2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">Success rate (%) on the LIBERO benchmark. Best in <span class="best">blue</span>.</p>
+
+    <!-- METAWORLD -->
+    <h3 class="title is-5" style="margin-top:2.5rem;">MetaWorld Benchmark</h3>
+    <div class="results-table-wrap">
+      <table class="results">
+        <thead>
+          <tr>
+            <th>Task Level (Numbers)</th><th>RT-1</th><th>DP</th><th>SuSIE</th><th>GR-1</th>
+            <th>Baku</th><th>VPP</th><th>DiffuView (Ours)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Easy (28 tasks)</td><td>0.605</td><td>0.442</td><td>0.560</td><td>0.725</td><td>0.831</td><td>0.818</td><td class="best">0.836</td></tr>
+          <tr><td>Medium (11 tasks)</td><td>0.042</td><td>0.062</td><td>0.196</td><td>0.327</td><td>0.527</td><td>0.493</td><td class="best">0.542</td></tr>
+          <tr><td>Hard &amp; Very Hard (11 tasks)</td><td>0.015</td><td>0.095</td><td>0.255</td><td>0.451</td><td>0.346</td><td>0.526</td><td class="best">0.537</td></tr>
+          <tr class="ours"><td>Average (50 tasks)</td><td>0.351</td><td>0.282</td><td>0.413</td><td>0.577</td><td>0.530</td><td>0.682</td><td class="best">0.706</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">Success rate on the MetaWorld benchmark. Best in <span class="best">blue</span>.</p>
+
+    <!-- MV-BENCH -->
+    <h3 class="title is-5" style="margin-top:2.5rem;">View Generalization &middot; Mv-Bench</h3>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content is-size-5 has-text-justified">
+          <p>
+            The policy takes only a <strong>single view</strong> as input during both training and inference. We train on
+            one fixed view (LIBERO agent view) and test across unseen viewpoints generated by rotating the camera around the
+            robot base along the z-axis. DiffuView maintains stable performance under large viewpoint shifts, whereas the
+            baseline collapses once the camera deviates from the training angle.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="results-table-wrap">
+      <table class="results">
+        <thead>
+          <tr><th>Method</th><th>&minus;30&deg;</th><th>&minus;15&deg;</th><th>0&deg;</th><th>15&deg;</th><th>30&deg;</th><th>45&deg;</th><th>60&deg;</th><th>Average</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>OpenVLA</td><td>25.7</td><td>62.4</td><td>84.7</td><td>54.8</td><td>26.4</td><td>12.6</td><td>8.2</td><td>39.3</td></tr>
+          <tr class="ours"><td>DiffuView (Ours)</td><td class="best">52.4</td><td class="best">67.9</td><td class="best">86.2</td><td class="best">72.9</td><td class="best">55.3</td><td class="best">44.9</td><td class="best">34.6</td><td class="best">59.2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">Mv-Bench success rate (%) across rotated viewpoints. DiffuView improves the average by ~20 points.</p>
+
+    <div class="fig-card has-text-centered" style="margin-top:2rem;">
+      <img src="static/images/ablation.png" alt="View-adaptive qualitative results">
+      <p class="caption">
+        Our pretrained model serves as a <strong>view-adaptive module</strong>, competently handling view transformation
+        within &minus;30&deg; &sim; 60&deg;.
+      </p>
+    </div>
+
+    <!-- REAL WORLD -->
+    <h3 class="title is-5" style="margin-top:2.5rem;">Real-World Experiments</h3>
+    <div class="fig-card has-text-centered">
+      <img src="static/images/experi.png" alt="Real-world rollouts and setup">
+      <p class="caption">
+        <strong>Successful rollouts of DiffuView (left) and the real-world setup (right).</strong> Experiments use a
+        Franka Research 3 arm with RealSense D435/D455 cameras providing multiple viewpoints and sensor configurations.
+      </p>
+    </div>
+
+    <div class="results-table-wrap">
+      <table class="results">
+        <thead>
+          <tr><th>Method</th><th>Wipe table</th><th>Return bowl</th><th>Open drawer</th><th>Pull out tissue</th><th>Average</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>DP</td><td>0.28</td><td>0.49</td><td>0.75</td><td>0.51</td><td>0.51</td></tr>
+          <tr><td>OpenVLA</td><td>0.49</td><td class="best">0.62</td><td>0.74</td><td class="best">0.68</td><td>0.63</td></tr>
+          <tr class="ours"><td>DiffuView (Ours)</td><td class="best">0.68</td><td>0.60</td><td class="best">0.77</td><td>0.54</td><td class="best">0.65</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">Real-world success rate on 4 challenging manipulation tasks.</p>
+
+    <div class="columns" style="margin-top:1.5rem;">
+      <div class="column is-half">
+        <div class="fig-card has-text-centered" style="height:100%;">
+          <img src="static/images/wanbu.png" alt="Wrist and third view generation">
+          <p class="caption">
+            Wrist-view and third-view generation on real-world data. <span style="color:#d26">Pink</span> boxes are source
+            images from various viewpoints; the <span style="color:#36c">blue</span> box is the target view to restore.
+          </p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="fig-card has-text-centered" style="height:100%;">
+          <img src="static/images/real-world.png" alt="Real-world multi-view diffusion">
+          <p class="caption">
+            Qualitative results of real-world multi-view diffusion, showcasing the adaptive scheme for varying numbers
+            of inference views.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABLATION -->
+    <h3 class="title is-5" style="margin-top:2.5rem;">Ablation Studies <span class="is-size-6 has-text-grey">(LIBERO-10)</span></h3>
+    <div class="results-table-wrap">
+      <table class="results">
+        <thead>
+          <tr><th>Ablation</th><th>Success Rate</th></tr>
+        </thead>
+        <tbody>
+          <tr class="ours"><td>DiffuView (full)</td><td class="best">89.2</td></tr>
+          <tr><td>w/o Robotics Data Pretraining</td><td>63.3</td></tr>
+          <tr><td>w/o Pl&uuml;cker Embedding</td><td>76.2</td></tr>
+          <tr><td>w/o FiLM Conditioning in Q-Former</td><td>73.3</td></tr>
+          <tr><td>Noise-Conditioned Experts Top&nbsp;K=1</td><td>87.7</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">
+      Each component contributes: robot-centric pretraining (&minus;25.9), Pl&uuml;cker geometry (&minus;13.0), and FiLM
+      language conditioning (&minus;15.9) are the most impactful.
+    </p>
+  </div>
+</section>
+
+<!-- ============ CONCLUSION ============ -->
+<section class="section" style="background:var(--bg-soft);">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">Conclusion</h2>
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <div class="content is-size-5 has-text-justified">
+          <p>
+            We proposed <strong>DiffuView</strong>, a two-stage framework that learns 3D-consistent visuomotor
+            representations through multi-view diffusion pretraining and multi-task diffusion-based policy learning.
+            DiffuView achieves state-of-the-art performance across multiple simulated manipulation benchmarks, and on the
+            proposed <strong>Mv-Bench</strong> it robustly handles large viewpoint shifts &mdash; establishing a new paradigm
+            for representation learning in robotic manipulation.
+          </p>
+          <p>
+            <strong>Limitation &amp; future work.</strong> The current pretraining lacks explicit understanding of dynamic
+            temporal information, limiting reasoning about motion continuity. We plan to extend DiffuView toward a joint
+            flexible-view and time pretraining framework for unified spatial-temporal representation learning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BIBTEX ============ -->
+<section class="section bibtex-section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 section-title has-text-centered">BibTeX</h2>
+    <pre>@inproceedings{zhang2026diffuview,
+  title     = {DiffuView: Multi-View Diffusion Pretraining for 3D-Aware Robotic Manipulation},
+  author    = {Zhang, Kaizhao and Niu, Tian and Liu, Tianyu and Guo, Chenen and
+               Xu, Zijun and Hu, Qingda and Ding, Wenchao},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2026}
+}</pre>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container is-max-desktop">
+    <div class="content has-text-centered">
+      <p>
+        This work was supported in part by the NSFC (Grant 62403142) and the Science and Technology
+        Commission of Shanghai Municipality (Grant 24511103100).
+      </p>
+      <p>
+        Website template adapted from the
+        <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page Template</a>,
+        originally based on <a href="https://nerfies.github.io/">Nerfies</a>. Content &copy; the authors.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
